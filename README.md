@@ -1,4 +1,4 @@
-# Sanber52-Cypress-Kelompok9
+# Sanber52-MobileAutomation-Kelompok9
  Repository for Mobile automation test.
  
  List Team & Task:
