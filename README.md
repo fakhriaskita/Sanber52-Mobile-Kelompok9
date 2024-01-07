@@ -12,3 +12,5 @@
 Cara menjalankan robot framework:
 
 robot -d result ['namafolder']/['nama file'].robot 
+
+Example : robot suites
