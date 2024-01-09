@@ -1,0 +1,4 @@
+button_homepageSearch: '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.Button[3]'
+
+field_flightnumber: 'com.example.myapplication:id/flight_number'
+button_searchFlight: 'com.example.myapplication:id/searchFlight'

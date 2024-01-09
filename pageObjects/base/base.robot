@@ -20,10 +20,3 @@ Open Flight Application
 
 Close Flight Application
     Close Application
-
-# *** Test Cases ***
-# TC001 Open App Flight Application
-#     Open Flight Application
-
-# TC002 Close App Flight Application
-#     Close Flight Application

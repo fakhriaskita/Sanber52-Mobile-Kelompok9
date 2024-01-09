@@ -1,0 +1,21 @@
+button_bookflight: 'com.example.myapplication:id/book'
+
+button_dropdown_fromcity: 'com.example.myapplication:id/spinnerFrom'
+optionvalue_fromcity: '/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.ListView/android.widget.TextView[2]'
+
+button_dropdown_tocity: 'com.example.myapplication:id/spinnerTo'
+# optionvalue_tocity: '/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.ListView/android.widget.TextView[2]'
+
+button_dropdown_class: 'com.example.myapplication:id/spinnerClass'
+# optionvalue_class: '/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.ListView/android.widget.TextView[3]'
+
+button_startdate: 'com.example.myapplication:id/textStartDate'
+selectdate_startdate: '//android.view.View[@content-desc="30 August 2019"]'
+submitbutton_startdate: 'android:id/button1'
+
+radiobutton_flight: 'com.example.myapplication:id/radioButtonFlight'
+
+buttonsubmit_bookflight: 'com.example.myapplication:id/book_flight'
+
+select_price: 'com.example.myapplication:id/price9'
+button_confirm_order: 'com.example.myapplication:id/confirm_order'

@@ -12,3 +12,9 @@ Click Sign In Button On Home Page
 
 Verify User Is Logged In
     Wait Until Element Is Visible      ${userName_text_homePage}
+
+Verify Booking Flight
+    Wait Until Element Is Visible      ${notif_successbooking}
+
+Verify Search Flight
+    Wait Until Element Is Visible        ${notif_successSearchflight}

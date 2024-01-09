@@ -1,3 +1,6 @@
 logo_homePage: '//android.widget.ImageView[@resource-id="com.example.myapplication:id/imageView4"]'
 signIn_button_homePage: '//android.widget.Button[@resource-id="com.example.myapplication:id/login"]'
 userName_text_homePage: '//android.widget.TextView[@resource-id="com.example.myapplication:id/textView"]'
+
+notif_successbooking: 'com.example.myapplication:id/checkedTextView'
+notif_successSearchflight:  xpath=//*[@text='DA 935']

@@ -5,7 +5,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="-1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta content="Robot Framework 4.0 (Python 3.10.4 on darwin)" name="Generator">
+<meta content="Robot Framework 6.1.1 (Python 3.10.4 on darwin)" name="Generator">
 <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKcAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAqAAAAAAAAAAAAAAAAAAAALIAAAD/AAAA4AAAANwAAADcAAAA3AAAANwAAADcAAAA3AAAANwAAADcAAAA4AAAAP8AAACxAAAAAAAAAKYAAAD/AAAAuwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC/AAAA/wAAAKkAAAD6AAAAzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN8AAAD/AAAA+gAAAMMAAAAAAAAAAgAAAGsAAABrAAAAawAAAGsAAABrAAAAawAAAGsAAABrAAAADAAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAAIsAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAANEAAAAAAAAA2gAAAP8AAAD6AAAAwwAAAAAAAAAAAAAAMgAAADIAAAAyAAAAMgAAADIAAAAyAAAAMgAAADIAAAAFAAAAAAAAANoAAAD/AAAA+gAAAMMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAADwAAAB8AAAAAAAAAGAAAABcAAAAAAAAAH8AAABKAAAAAAAAAAAAAAAAAAAA2gAAAP8AAAD6AAAAwwAAAAAAAADCAAAA/wAAACkAAADqAAAA4QAAAAAAAAD7AAAA/wAAALAAAAAGAAAAAAAAANoAAAD/AAAA+gAAAMMAAAAAAAAAIwAAAP4AAAD/AAAA/wAAAGAAAAAAAAAAAAAAAMkAAAD/AAAAigAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAAAAAAAAIAAAAcAAAABkAAAAAAAAAAAAAAAAAAAAAAAAAEgAAAAAAAAAAAAAA2gAAAP8AAAD7AAAAywAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN4AAAD/AAAAqwAAAP8AAACvAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALIAAAD/AAAAsgAAAAAAAAC5AAAA/wAAAMoAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMkAAAD/AAAAvAAAAAAAAAAAAAAAAAAAAKwAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAArQAAAAAAAAAAwAMAAIABAAAf+AAAP/wAAD/8AAAgBAAAP/wAAD/8AAA//AAAJIwAADHEAAA//AAAP/wAAB/4AACAAQAAwAMAAA==">
 <style media="all" type="text/css">
 /* Generic and misc styles */
@@ -319,6 +319,9 @@ th.stats-col-graph:hover {
     padding: 3px;
     cursor: default;
 }
+.element-header .label {
+    margin-right: 0.5em;
+}
 .name {
     font-weight: bold;
 }
@@ -557,6 +560,9 @@ function toggleSuite(suiteId) {
 }
 function toggleTest(testId) {
     toggleElement(testId, ['keyword']);
+    var test = window.testdata.findLoaded(testId);
+    if (test.status == "FAIL" || test.status == "SKIP")
+        expandFailed(test);
 }
 function toggleKeyword(kwId) {
     toggleElement(kwId, ['keyword']);
@@ -588,10 +594,10 @@ function drawCallback(element, childElement, childrenNames) {
     }
 }
 function expandSuite(suite) {
-    if (suite.status == "PASS")
-        expandElement(suite);
-    else
+    if (suite.status == "FAIL")
         expandFailed(suite);
+    else
+        expandElement(suite);
 }
 function expandElement(item, retryCount) {
     retryCount = typeof retryCount !== 'undefined' ? retryCount : 3;
@@ -620,7 +626,7 @@ function loadAndExpandElementIds(ids) {
     }
 }
 function expandFailed(element) {
-    if (element.status == "FAIL") {
+    if (element.status == "FAIL" || (element.type == "test" && element.status == "SKIP")) {
         window.elementsToExpand = [element];
         window.expandDecider = function (e) {
             return e.status == "FAIL";
@@ -645,8 +651,9 @@ function expandRecursively() {
     element.callWhenChildrenReady(function () {
         var children = element.children();
         for (var i = children.length-1; i >= 0; i--) {
-            if (window.expandDecider(children[i]))
-                window.elementsToExpand.push(children[i]);
+            var child = children[i];
+            if (child.type != 'message' && window.expandDecider(child))
+                window.elementsToExpand.push(child);
         }
         if (window.elementsToExpand.length)
             setTimeout(expandRecursively, 0);
@@ -965,6 +972,7 @@ window.model = (function () {
     }
     function Keyword(data) {
         var kw = createModelObject(data);
+        var flatTypes = ['RETURN', 'BREAK', 'CONTINUE'];
         kw.libname = data.libname;
         kw.fullName = (kw.libname ? kw.libname + '.' : '') + kw.name;
         kw.type = data.type;
@@ -1349,8 +1357,8 @@ window.testdata = function () {
     var _statistics = null;
     var LEVELS = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FAIL', 'SKIP'];
     var STATUSES = ['FAIL', 'PASS', 'SKIP', 'NOT RUN'];
-    var KEYWORD_TYPES = ['KEYWORD', 'SETUP', 'TEARDOWN', 'FOR', 'VAR', 'IF', 'ELSE IF', 'ELSE'];
-    var MESSAGE_TYPE = 8;
+    var KEYWORD_TYPES = ['KEYWORD', 'SETUP', 'TEARDOWN', 'FOR', 'ITERATION', 'IF', 'ELSE IF', 'ELSE', 'RETURN',
+                         'TRY', 'EXCEPT', 'FINALLY', 'WHILE', 'CONTINUE', 'BREAK', 'ERROR'];
     function addElement(elem) {
         if (!elem.id)
             elem.id = uniqueId();
@@ -1371,10 +1379,10 @@ window.testdata = function () {
                 elapsed];
     }
     function createMessage(element, strings) {
-        return model.Message(LEVELS[element[2]],
-                             util.timestamp(element[1]),
-                             strings.get(element[3]),
-                             strings.get(element[4]));
+        return model.Message(LEVELS[element[1]],
+                             util.timestamp(element[0]),
+                             strings.get(element[2]),
+                             strings.get(element[3]));
     }
     function parseStatus(stats) {
         return STATUSES[stats[0]];
@@ -1385,9 +1393,12 @@ window.testdata = function () {
         };
     }
     function createBodyItem(parent, element, strings, index) {
-        if (element[0] == MESSAGE_TYPE)
+        if (element.length < 5)
             return createMessage(element, strings);
-        return createKeyword(parent, element, strings, index);
+        var messages = util.filter(parent.children(), function (child) {
+            return child.type == 'message';
+        })
+        return createKeyword(parent, element, strings, index - messages.length);
     }
     function createKeyword(parent, element, strings, index) {
         var kw = model.Keyword({
@@ -1795,25 +1806,25 @@ function stopPropagation(event) {
 window.output = {};
 </script>
 <script type="text/javascript">
-window.output["suite"] = [1,2,3,0,[],[1,0,11116],[],[[4,0,0,[],[1,74,11041],[[1,5,6,0,7,8,0,0,[1,75,9912],[[0,9,10,0,0,0,0,0,[1,75,7028],[[0,11,12,0,13,14,0,0,[1,75,7027],[]]]],[0,15,16,0,0,0,0,0,[1,7103,2884],[[0,17,18,0,0,0,0,0,[1,7104,572],[[0,19,12,0,20,21,0,0,[1,7105,571],[]]]],[0,22,18,0,0,0,0,0,[1,7676,101],[[0,19,12,0,20,23,0,0,[1,7676,25],[]],[0,24,12,0,25,23,0,0,[1,7701,75],[[8,7705,2,26]]]]],[0,27,16,0,0,0,0,0,[1,7777,1064],[[0,19,12,0,20,28,0,0,[1,7779,973],[]],[0,19,12,0,20,29,0,0,[1,8752,52],[]],[0,19,12,0,20,30,0,0,[1,8806,35],[]]]],[0,31,16,0,0,32,0,0,[1,8842,44],[[0,33,12,0,34,35,0,0,[1,8842,43],[[8,8845,2,36]]]]],[0,37,16,0,0,38,0,0,[1,8886,526],[[0,33,12,0,34,39,0,0,[1,8886,525],[[8,8889,2,40]]]]],[0,41,16,0,0,0,0,0,[1,9412,575],[[0,24,12,0,25,30,0,0,[1,9412,574],[[8,9415,2,42]]]]]]]]],[0,43,18,0,0,0,0,0,[1,9988,739],[[0,19,12,0,20,44,0,0,[1,9988,738],[]]]],[2,45,10,0,0,0,0,0,[1,10727,388],[[0,46,12,0,47,0,0,0,[1,10727,387],[]]]]]]],[],[1,1,0,0]];
+window.output["suite"] = [1,2,3,0,[],[1,0,45136],[],[[4,0,0,[],[1,88,12977],[[1,5,6,0,7,8,0,0,[1,89,8936],[[0,8,9,0,0,0,0,0,[1,89,8935],[[0,10,11,0,12,13,0,0,[1,89,8935],[]]]]]],[0,14,15,0,0,0,0,0,[1,9025,2833],[[0,16,17,0,0,0,0,0,[1,9026,599],[[0,18,11,0,19,20,0,0,[1,9027,597],[[9624,2,21]]]]],[0,22,17,0,0,0,0,0,[1,9625,103],[[0,18,11,0,19,23,0,0,[1,9625,29],[[9654,2,24]]],[0,25,11,0,26,23,0,0,[1,9654,74],[[9658,2,27],[9728,2,24]]]]],[0,28,15,0,0,0,0,0,[1,9728,951],[[0,18,11,0,19,29,0,0,[1,9729,895],[[10624,2,30]]],[0,18,11,0,19,31,0,0,[1,10624,23],[[10647,2,32]]],[0,18,11,0,19,33,0,0,[1,10647,31],[[10678,2,34]]]]],[0,35,15,0,0,36,0,0,[1,10679,45],[[0,37,11,0,38,39,0,0,[1,10687,37],[[10692,2,40],[10724,2,41]]]]],[0,42,15,0,0,43,0,0,[1,10725,552],[[0,37,11,0,38,44,0,0,[1,10725,552],[[10728,2,45],[11277,2,32]]]]],[0,46,15,0,0,0,0,0,[1,11278,580],[[0,25,11,0,26,33,0,0,[1,11278,580],[[11283,2,47],[11858,2,34]]]]]]],[0,48,17,0,0,0,0,0,[1,11859,736],[[0,18,11,0,19,49,0,0,[1,11859,736],[[12595,2,50]]]]],[2,51,9,0,0,0,0,0,[1,12596,469],[[0,52,11,0,53,0,0,0,[1,12596,468],[]]]]]],[54,0,0,[],[1,13065,20352],[[1,5,6,0,7,8,0,0,[1,13066,5937],[[0,8,9,0,0,0,0,0,[1,13066,5937],[[0,10,11,0,12,13,0,0,[1,13066,5936],[]]]]]],[0,14,15,0,0,0,0,0,[1,19004,2700],[[0,16,17,0,0,0,0,0,[1,19005,616],[[0,18,11,0,19,20,0,0,[1,19006,615],[[19621,2,21]]]]],[0,22,17,0,0,0,0,0,[1,19621,92],[[0,18,11,0,19,23,0,0,[1,19622,28],[[19650,2,24]]],[0,25,11,0,26,23,0,0,[1,19650,63],[[19653,2,27],[19713,2,24]]]]],[0,28,15,0,0,0,0,0,[1,19713,836],[[0,18,11,0,19,29,0,0,[1,19714,782],[[20496,2,30]]],[0,18,11,0,19,31,0,0,[1,20497,28],[[20525,2,32]]],[0,18,11,0,19,33,0,0,[1,20525,24],[[20549,2,34]]]]],[0,35,15,0,0,36,0,0,[1,20549,29],[[0,37,11,0,38,39,0,0,[1,20550,28],[[20553,2,40],[20578,2,41]]]]],[0,42,15,0,0,43,0,0,[1,20578,560],[[0,37,11,0,38,44,0,0,[1,20579,559],[[20582,2,45],[21138,2,32]]]]],[0,46,15,0,0,0,0,0,[1,21139,564],[[0,25,11,0,26,33,0,0,[1,21139,564],[[21142,2,47],[21703,2,34]]]]]]],[0,55,56,0,0,0,0,0,[1,21704,10551],[[0,57,56,0,0,0,0,0,[1,21705,803],[[0,18,11,0,19,49,0,0,[1,21705,716],[[22420,2,58]]],[0,25,11,0,26,59,0,0,[1,22421,87],[[22424,2,60],[22508,2,61]]]]],[0,62,56,0,0,0,0,0,[1,22509,630],[[0,18,11,0,19,63,0,0,[1,22509,615],[[23124,2,64]]],[0,18,11,0,19,65,0,0,[1,23124,15],[[23139,2,66]]]]],[0,67,56,0,0,68,0,0,[1,23140,1598],[[0,25,11,0,26,63,0,0,[1,23140,41],[[23143,2,69],[23181,2,70]]],[0,18,11,0,19,71,0,0,[1,23182,856],[[24038,2,72]]],[0,25,11,0,26,71,0,0,[1,24039,699],[[24042,2,73],[24738,2,74]]]]],[0,75,56,0,0,76,0,0,[1,24739,1618],[[0,25,11,0,26,65,0,0,[1,24740,84],[[24744,2,77],[24823,2,66]]],[0,18,11,0,19,78,0,0,[1,24824,862],[[25685,2,79]]],[0,25,11,0,26,78,0,0,[1,25687,669],[[25691,2,80],[26356,2,81]]]]],[0,82,56,0,0,83,0,0,[1,26357,1611],[[0,25,11,0,26,84,0,0,[1,26359,106],[[26365,2,85],[26465,2,86]]],[0,18,11,0,19,87,0,0,[1,26465,848],[[27313,2,88]]],[0,25,11,0,26,87,0,0,[1,27313,655],[[27316,2,89],[27968,2,90]]]]],[0,91,56,0,0,0,0,0,[1,27969,1640],[[0,25,11,0,26,92,0,0,[1,27969,79],[[27973,2,93],[28048,2,94]]],[0,18,11,0,19,95,0,0,[1,28049,755],[[28804,2,96]]],[0,25,11,0,26,95,0,0,[1,28805,687],[[28811,2,97],[29492,2,98]]],[0,25,11,0,26,99,0,0,[1,29493,116],[[29499,2,100],[29609,2,101]]]]],[0,102,56,0,0,0,0,0,[1,29610,618],[[0,25,11,0,26,103,0,0,[1,29610,617],[[29613,2,104],[30227,2,105]]]]],[0,106,56,0,0,0,0,0,[1,30229,553],[[0,25,11,0,26,107,0,0,[1,30229,552],[[30233,2,108],[30781,2,109]]]]],[0,110,56,0,0,0,0,0,[1,30782,724],[[0,18,11,0,19,111,0,0,[1,30783,723],[[31505,2,112]]]]],[0,113,56,0,0,0,0,0,[1,31506,79],[[0,25,11,0,26,111,0,0,[1,31506,79],[[31510,2,114],[31585,2,112]]]]],[0,115,56,0,0,0,0,0,[1,31586,669],[[0,25,11,0,26,116,0,0,[1,31586,669],[[31589,2,117],[32255,2,118]]]]]]],[0,119,17,0,0,0,0,0,[1,32255,702],[[0,18,11,0,19,120,0,0,[1,32256,701],[[32957,2,121]]]]],[2,51,9,0,0,0,0,0,[1,32958,459],[[0,52,11,0,53,0,0,0,[1,32958,459],[]]]]]],[122,0,0,[],[1,33418,11717],[[1,5,6,0,7,8,0,0,[1,33418,5910],[[0,8,9,0,0,0,0,0,[1,33418,5910],[[0,10,11,0,12,13,0,0,[1,33418,5907],[]]]]]],[0,14,15,0,0,0,0,0,[1,39330,2676],[[0,16,17,0,0,0,0,0,[1,39331,565],[[0,18,11,0,19,20,0,0,[1,39331,564],[[39895,2,21]]]]],[0,22,17,0,0,0,0,0,[1,39896,101],[[0,18,11,0,19,23,0,0,[1,39896,38],[[39934,2,24]]],[0,25,11,0,26,23,0,0,[1,39935,62],[[39938,2,27],[39997,2,24]]]]],[0,28,15,0,0,0,0,0,[1,39998,835],[[0,18,11,0,19,29,0,0,[1,39998,770],[[40768,2,30]]],[0,18,11,0,19,31,0,0,[1,40768,20],[[40788,2,32]]],[0,18,11,0,19,33,0,0,[1,40788,45],[[40832,2,34]]]]],[0,35,15,0,0,36,0,0,[1,40834,33],[[0,37,11,0,38,39,0,0,[1,40834,33],[[40838,2,40],[40867,2,41]]]]],[0,42,15,0,0,43,0,0,[1,40868,557],[[0,37,11,0,38,44,0,0,[1,40868,557],[[40871,2,45],[41424,2,32]]]]],[0,46,15,0,0,0,0,0,[1,41425,581],[[0,25,11,0,26,33,0,0,[1,41426,579],[[41429,2,47],[42005,2,34]]]]]]],[0,122,123,0,0,0,0,0,[1,42006,2105],[[0,124,123,0,0,0,0,0,[1,42006,776],[[0,18,11,0,19,125,0,0,[1,42007,710],[[42717,2,126]]],[0,25,11,0,26,125,0,0,[1,42717,65],[[42721,2,127],[42782,2,128]]]]],[0,129,123,0,0,0,0,0,[1,42782,769],[[0,18,11,0,19,130,0,0,[1,42783,705],[[43488,2,131]]],[0,37,11,0,38,132,0,0,[1,43488,62],[[43492,2,133],[43550,2,134]]]]],[0,135,123,0,0,0,0,0,[1,43551,560],[[0,25,11,0,26,136,0,0,[1,43551,560],[[43554,2,137],[44111,2,138]]]]]]],[0,139,17,0,0,0,0,0,[1,44112,566],[[0,18,11,0,19,140,0,0,[1,44112,566],[[44677,2,141]]]]],[2,51,9,0,0,0,0,0,[1,44679,456],[[0,52,11,0,53,0,0,0,[1,44680,455],[]]]]]]],[],[3,3,0,0]];
 </script>
 <script type="text/javascript">
 window.output["strings"] = [];
 </script>
 <script type="text/javascript">
-window.output["strings"] = window.output["strings"].concat(["*","*loginSuite","*/Users/fakhriaskitafauzan/Mobile-Automation-Sanber52/sanbercode-52-mobile/suites/loginSuite.robot","*../suites/loginSuite.robot","*User should be able to login with valid credentials","*Run Keywords","*BuiltIn","*<p>Executes all the given keywords in a sequence.\x3c/p>","*Open Flight Application, AND Login With Valid Credentials","*Open Flight Application","*base","*Open Application","*AppiumLibrary","eNq1UU1PwzAMvfMrrJ63RlxRFmmCKxoSJ07ISbw2InUiJ93+Pi3d1A3OXPzx/N6z4uhsDpm4AALTGTDnGBzWkBhqgi6ciGGfcxgHKCQnkhaeMaMNMdRABdJx1qzjDezZSwoekD2Ew/sG3iJhIXA9uS/QCL3Qcdf0tebypFQXaj/a1qVBLUbXZGOyasBSSZRPrihidZZpK3dbGZnnfKEuq7coXWkH35j/89YKjVbZPOiKNhLYJJ5k1zw2MyRz8Ebb6abzCbWyE3tCrvArcvsHfKHiJPwWqMXtYik0pEqfo8RV+kFlbe7+CFbevQ3GgDciTmt9O1pE6ueJ5htaB7wi","*remote_url=${REMOTE_URL}, platformName=${PLATFORM_NAME}, platformVersion=${PLATFORM_VERSION}, deviceName=${DEVICE_NAME}, appPackage=${APP_PACKAGE}, appActivity=${APP_ACTIVITY}","*AND Login With Valid Credentials","*loginPage","*Verify Home Page Appears","*homePage","*Wait Until Element Is Visible","*<p>Waits until element specified with `locator` is visible.\x3c/p>","*${logo_homePage}","*Click Sign In Button On Home Page","*${signIn_button_homePage}","*Click Element","*<p>Click element identified by `locator`.\x3c/p>","*Clicking element '//android.widget.Button[@resource-id=\"com.example.myapplication:id/login\"]'.","*Verify Login Appears","*${email_input_loginPage}","*${password_input_loginPage}","*${signIn_button_loginPage}","*Input User Email On Login Page","*${email}","*Input Text","*<p>Types the given `text` into text field identified by `locator`.\x3c/p>","*${email_input_loginPage}, ${email}","*Typing text 'support@ngendigital.com' into text field '//android.widget.EditText[@resource-id=\"com.example.myapplication:id/username\"]'","*Input User Password On Login Page","*${password}","*${password_input_loginPage}, ${password}","*Typing text 'abc123' into text field '//android.widget.EditText[@resource-id=\"com.example.myapplication:id/password\"]'","*Click Sign In Button On Login Page","*Clicking element '//android.widget.Button[@resource-id=\"com.example.myapplication:id/signIn\"]'.","*Verify User Is Logged In","*${userName_text_homePage}","*Close Flight Application","*Close Application","*<p>Closes the current application and also close webdriver session.\x3c/p>"]);
+window.output["strings"] = window.output["strings"].concat(["*","*loginSuite","*/Users/fakhriaskitafauzan/Sanber52-QA/Sanber52-MobileAutomation-Kelompok9/suites/loginSuite.robot","*../suites/loginSuite.robot","*User should be able to login with valid credentials","*Run Keywords","*BuiltIn","*<p>Executes all the given keywords in a sequence.\x3c/p>","*Open Flight Application","*base","*Open Application","*AppiumLibrary","eNq1UsFOwzAMvfMV1s5bI66oqzTBFYbEidOUNG5rLXWiON3E35OwTV3hzCVOnv2eo2fXodkHZAENjGfQIThqdSLPkDz0dEKGXQg0jSAYTxgreNZBG3KUCAV8Vzhzeg07ttGTBc0WaP+xhneHWhDaAdsj1BqGiN12NaQU5EmpntIwmar1o7oI3YJx3qhRS8KorG9FIatzzF2538SJucRr6aX1RsdeqtGumv/TrpVuahWahzpp4xCMjxbjdvW4KlAsh21qkz0tFtbK5OqM3OBXzdUf8AWljfSboC5qV8mIo094mKKbqZ8o82MxI5jrljLakb4jsZ/v96klSVKkNh1E7nq/LZjOnwW+/FRWRjDPPTs+5vlLATQD8SnLZxhjoq7sF8LgJYGjI+bNE3TdRqhntOAZq8U31I/TzTcnNerS","*remote_url=${REMOTE_URL}, platformName=${PLATFORM_NAME}, platformVersion=${PLATFORM_VERSION}, deviceName=${DEVICE_NAME}, appPackage=${APP_PACKAGE}, appActivity=${APP_ACTIVITY}","*Login With Valid Credentials","*loginPage","*Verify Home Page Appears","*homePage","*Wait Until Element Is Visible","*<p>Waits until element specified with `locator` is visible.\x3c/p>","*${logo_homePage}","*xpath criteria: //android.widget.ImageView[@resource-id=\"com.example.myapplication:id/imageView4\"]","*Click Sign In Button On Home Page","*${signIn_button_homePage}","*xpath criteria: //android.widget.Button[@resource-id=\"com.example.myapplication:id/login\"]","*Click Element","*<p>Click element identified by `locator`.\x3c/p>","*Clicking element '//android.widget.Button[@resource-id=\"com.example.myapplication:id/login\"]'.","*Verify Login Appears","*${email_input_loginPage}","eNq1zD0Kg0AQBtA+pxD77PaCYJMbpBOLYedDP3B/GEeyuX1OkXeA15v4MSSjwyjTEKMUtUoNH+oODy+lv9F9XQxXvS3hSZ3HVHNAl9xOhPyV1k4mcdYyUeN9wYpkjNuj//f/AbINR2c=","*${password_input_loginPage}","*xpath criteria: //android.widget.EditText[@resource-id=\"com.example.myapplication:id/password\"]","*${signIn_button_loginPage}","*xpath criteria: //android.widget.Button[@resource-id=\"com.example.myapplication:id/signIn\"]","*Input User Email On Login Page","*${email}","*Input Text","*<p>Types the given `text` into text field identified by `locator`.\x3c/p>","*${email_input_loginPage}, ${email}","*Typing text 'support@ngendigital.com' into text field '//android.widget.EditText[@resource-id=\"com.example.myapplication:id/username\"]'","*xpath criteria: //android.widget.EditText[@resource-id=\"com.example.myapplication:id/username\"]","*Input User Password On Login Page","*${password}","*${password_input_loginPage}, ${password}","*Typing text 'abc123' into text field '//android.widget.EditText[@resource-id=\"com.example.myapplication:id/password\"]'","*Click Sign In Button On Login Page","*Clicking element '//android.widget.Button[@resource-id=\"com.example.myapplication:id/signIn\"]'.","*Verify User Is Logged In","*${userName_text_homePage}","eNq1zDEKgDAMBdDdU4i77S4IHkJcxCE0QT9YW2LEensXr+AB3iuZbKuDwkRBXe09HawJ7G7wKuZGKTZB7nlQOdOlQVpw34QUnRSKeRcXH8p5RyBDOjqwt880S1X+/V/D9UeR","*Close Flight Application","*Close Application","*<p>Closes the current application and also close webdriver session.\x3c/p>","*Doing One Way Booking Flight","*Flight Booking One Way","*oneWayBooking","*Go to Booking Page","*xpath criteria: //android.widget.TextView[@resource-id=\"com.example.myapplication:id/textView\"]","*${button_bookflight}","*Clicking element 'com.example.myapplication:id/book'.","*criteria is com.example.myapplication:id/book","*Verify Booking Appears","*${button_dropdown_fromcity}","eNpLLsosSS3KTFTILFZIzs/VS61IzC3ISdXLrUwsKMjJTE4syczPs8pM0S8uyMzLSy1yK8rP5UomQxMAVwwofQ==","*${button_dropdown_tocity}","*criteria is com.example.myapplication:id/spinnerTo","*Select From City","*${button_dropdown_fromcity}, ${value_fromcity}","*Clicking element 'com.example.myapplication:id/spinnerFrom'.","*criteria is com.example.myapplication:id/spinnerFrom","*xpath=//*[@text='${value_fromcity}']","*xpath criteria: //*[@text='Chicago']\nxpath criteria: //*[@text='Chicago']","*Clicking element 'xpath=//*[@text='Chicago']'.","*xpath criteria: //*[@text='Chicago']","*Select To City","*${button_dropdown_tocity}, ${value_tocity}","*Clicking element 'com.example.myapplication:id/spinnerTo'.","*xpath=//*[@text='${value_tocity}']","*xpath criteria: //*[@text='Paris']\nxpath criteria: //*[@text='Paris']","*Clicking element 'xpath=//*[@text='Paris']'.","*xpath criteria: //*[@text='Paris']","*Select Class","*${button_dropdown_class}, ${value_class}","*${button_dropdown_class}","*Clicking element 'com.example.myapplication:id/spinnerClass'.","*criteria is com.example.myapplication:id/spinnerClass","*xpath=//*[@text='${value_class}']","*xpath criteria: //*[@text='First']\nxpath criteria: //*[@text='First']","*Clicking element 'xpath=//*[@text='First']'.","*xpath criteria: //*[@text='First']","*Select Start Date","*${button_startdate}","*Clicking element 'com.example.myapplication:id/textStartDate'.","*criteria is com.example.myapplication:id/textStartDate","*xpath=${selectdate_startdate}","eNqrKEgsyVBILsosSS3KTLRS0NdPzEspys9M0SvLTC3XCwMS0Q7J+XklqXkluimpxcm2SsYGCo6l6aXFJQpGBoaWSrFcFZSbAQCZJy4h","*Clicking element 'xpath=//android.view.View[@content-desc=\"30 August 2019\"]'.","*xpath criteria: //android.view.View[@content-desc=\"30 August 2019\"]","*${submitbutton_startdate}","*Clicking element 'android:id/button1'.","*criteria is android:id/button1","*Choose Option Flight","*${radiobutton_flight}","*Clicking element 'com.example.myapplication:id/radioButtonFlight'.","*criteria is com.example.myapplication:id/radioButtonFlight","*Click Booking","*${buttonsubmit_bookflight}","*Clicking element 'com.example.myapplication:id/book_flight'.","*criteria is com.example.myapplication:id/book_flight","*Verify Confirm Booking Order Appears","*${select_price}","*criteria is com.example.myapplication:id/price9","*Select Price","*Clicking element 'com.example.myapplication:id/price9'.","*Submit Confirm Booking Order","*${button_confirm_order}","*Clicking element 'com.example.myapplication:id/confirm_order'.","*criteria is com.example.myapplication:id/confirm_order","*Verify Booking Flight","*${notif_successbooking}","eNpLLsosSS3KTFTILFZIzs/VS61IzC3ISdXLrUwsKMjJTE4syczPs8pM0U/OSE3OTk0JSa0oCctMLedKJlMjAJ/hK2U=","*Search Flight","*searchFlight","*Go to Page Flight Search","*xpath=${button_homepageSearch}","eNqrKEgsyVBILsosSS3KTLRS0M/ITC1KLErOqNRPzEspys9M0SvPTElPLdFzK0rMTfVJrMwvLUGX8snMS00swi5HRW1lmanlemFAwr0ov7QAXYdTaUlJfl60cSxXxfDzEwCRFqFR","eNpzzslMzs7MS1dIzUnNTc0rUVCvKEgsybDVz8hMLUosSs6o1E/MSynKz0zRK89MSU8t0XMrSsxN9UmszC8tQZfyycxLTSzCLkdFbWWZqeV6YUDCvSi/tABdh1NpSUl+XrRxrLoeAHT7U94=","eNqrKEgsyVBILsosSS3KTLRS0M/ITC1KLErOqNRPzEspys9M0SvPTElPLdFzK0rMTfVJrMwvLUGX8snMS00swi5HRW1lmanlemFAwr0ov7QAXYdTaUlJfl60cSwAXvJQpA==","*Enter Flight Number","*${field_flightnumber}","eNpLLsosSS3KTFTILFZIzs/VS61IzC3ISdXLrUwsKMjJTE4syczPs8pM0U/LyUzPKInPK81NSi3iSiZLGwD/Lyoj","*${field_flightnumber}, ${value_flightnumber}","*Typing text 'DA935' into text field 'com.example.myapplication:id/flight_number'","*criteria is com.example.myapplication:id/flight_number","*Click Button Search","*${button_searchFlight}","*Clicking element 'com.example.myapplication:id/searchFlight'.","*criteria is com.example.myapplication:id/searchFlight","*Verify Search Flight","*${notif_successSearchflight}","*xpath criteria: //*[@text='DA 935']\nxpath criteria: //*[@text='DA 935']"]);
 </script>
 <script type="text/javascript">
-window.output["stats"] = [[{"elapsed":"00:00:11","fail":0,"label":"All Tests","pass":1,"skip":0}],[],[{"elapsed":"00:00:11","fail":0,"id":"s1","label":"loginSuite","name":"loginSuite","pass":1,"skip":0}]];
+window.output["stats"] = [[{"elapsed":"00:00:45","fail":0,"label":"All Tests","pass":3,"skip":0}],[],[{"elapsed":"00:00:45","fail":0,"id":"s1","label":"loginSuite","name":"loginSuite","pass":3,"skip":0}]];
 </script>
 <script type="text/javascript">
 window.output["errors"] = [];
 </script>
 <script type="text/javascript">
-window.output["baseMillis"] = 1704602464934;
+window.output["baseMillis"] = 1704795612902;
 </script>
 <script type="text/javascript">
-window.output["generated"] = 11124;
+window.output["generated"] = 45155;
 </script>
 <script type="text/javascript">
 window.output["expand_keywords"] = null;
@@ -1920,8 +1931,8 @@ function makeElementVisible(id) {
         util.map(ids, expandElementWithId);
         if (ids.length) {
             expandFailed(window.testdata.findLoaded(util.last(ids)));
-            window.location.hash = '';
             window.location.hash = id;
+            document.getElementById(id).scrollIntoView();
             highlightLinkTarget();
         }
     });
@@ -2119,7 +2130,7 @@ function addExecutionLog(main) {
     <div class="element-header closed" onclick="toggleKeyword('${id}')">
       <div class="element-header-left" title="${type}  {{if name}}{{html fullName}}  {{/if}}[${status}]">
         <span class="elapsed" title="Elapsed time">${times.elapsedTime}</span>
-        <span class="label keyword ${status.toLowerCase()}">${type}</span>
+        <span class="label ${status.toLowerCase()}">${type}</span>
         <span>{{html assign}}</span>
         <span class="name"><span class="parent-name">{{html libname}}{{if libname}} . {{/if}}</span>{{html name}}</span>
         <span class="arg">{{html arguments}}</span>
@@ -2127,7 +2138,7 @@ function addExecutionLog(main) {
       <div class="element-header-right" onclick="stopPropagation(event)">
         <a class="expand" title="Expand all" href="javascript:expandAll('${id}')"></a>
         <a class="collapse" title="Collapse all" href="javascript:collapseAll('${id}')"></a>
-        <a class="link" title="Link to this keyword" href="#${id}" onclick="makeElementVisible('${id}')"></a>
+        <a class="link" title="Link to this item" href="#${id}" onclick="makeElementVisible('${id}')"></a>
       </div>
       <div class="element-header-toggle" title="Toggle visibility"></div>
     </div>
