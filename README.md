@@ -5,9 +5,9 @@
  1. Fatma Nurul Hidayah : 
  2. Nurcahaya Kerentryna : 
  3. Alwi Faisal Zulfikar : 
- 4. Hadi Al Bukhori : 
+ 4. Hadi Al Bukhori : Invalid Login with Various Condition
  5. Yuliani Ika Fatmawati : 
- 6. Fakhri Askita Fauzan : 
+ 6. Fakhri Askita Fauzan : Add Search and Book FLight (one way)
 
 Cara menjalankan robot framework:
 
