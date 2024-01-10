@@ -71,4 +71,3 @@ Flight Booking One Way
     Verify Confirm Booking Order Appears
     Select Price
     Submit Confirm Booking Order
-

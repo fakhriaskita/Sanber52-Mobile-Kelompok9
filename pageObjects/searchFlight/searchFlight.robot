@@ -24,4 +24,3 @@ Search Flight
     Go to Page Flight Search
     Enter Flight Number
     Click Button Search
-

@@ -1,20 +1,20 @@
 *** Settings ***
-Resource                ../base/base.robot
-Variables               homepage_locators.yaml
+Resource      ../base/base.robot
+Variables      homePage_locators.yaml
 
 *** Keywords ***
 Verify Home Page Appears
-    Wait Until Element Is Visible      ${logo_homePage}
+    Wait Until Element Is Visible       ${logo_homePage}
 
-Click Sign In Button On Home Page
-    Wait Until Element Is Visible      ${signIn_button_homePage}
-    Click Element                      ${signIn_button_homePage}
+Click Sign In Button In Home Page
+    Wait Until Element Is Visible       ${signIn_button_homePage}
+    Click Element                       ${signIn_button_homePage}
 
 Verify User Is Logged In
-    Wait Until Element Is Visible      ${userName_text_homePage}
+     Wait Until Element Is Visible      ${userName_text_homePage}
 
 Verify Booking Flight
     Wait Until Element Is Visible      ${notif_successbooking}
 
 Verify Search Flight
-    Wait Until Element Is Visible        ${notif_successSearchflight}
+    Wait Until Element Is Visible       ${notif_successSearchflight}

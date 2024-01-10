@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 6.1.1 (Python 3.10.4 on darwin)" generated="20240109 17:24:47.596" rpa="false" schemaversion="4">
-<suite id="s1" name="loginSuite" source="/Users/fakhriaskitafauzan/Sanber52-QA/Sanber52-MobileAutomation-Kelompok9/suites/loginSuite.robot">
-<test id="s1-t1" name="Doing One Way Booking Flight" line="35">
+<robot generator="Robot 6.1.1 (Python 3.12.1 on win32)" generated="20240110 10:06:40.815" rpa="false" schemaversion="4">
+<suite id="s1" name="Suites" source="D:\Sanber52-Mobile-Kelompok9\suites">
+<suite id="s1-s1" name="loginSuite" source="D:\Sanber52-Mobile-Kelompok9\suites\loginSuite.robot">
+<test id="s1-s1-t1" name="User should be able to login with valid credentials" line="17">
 <kw name="Run Keywords" library="BuiltIn" type="SETUP">
-<arg>Open Flight Application</arg>
+<arg>Open Flight Aplication</arg>
+<arg>AND</arg>
+<arg>Login With Valid Credentials</arg>
 <doc>Executes all the given keywords in a sequence.</doc>
-<kw name="Open Flight Application" library="base">
+<kw name="Open Flight Aplication" library="base">
 <kw name="Open Application" library="AppiumLibrary">
 <arg>remote_url=${REMOTE_URL}</arg>
 <arg>platformName=${PLATFORM_NAME}</arg>
 <arg>platformVersion=${PLATFORM_VERSION}</arg>
 <arg>deviceName=${DEVICE_NAME}</arg>
-<arg>appPackage=${APP_PACKAGE}</arg>
+<arg>appPackege=${APP_PACKAGE}</arg>
 <arg>appActivity=${APP_ACTIVITY}</arg>
 <doc>Opens a new application to given Appium server.
 Capabilities of appium server, Android and iOS,
@@ -20,318 +23,240 @@ Please check https://github.com/appium/appium/blob/master/docs/en/writing-runnin
 | remote_url          | Yes    | Appium server url |
 | alias               | no     | alias             |
 | strict_ssl          | No     | allows you to send commands to an invalid certificate host like a self-signed one. |</doc>
-<status status="PASS" starttime="20240109 17:24:47.698" endtime="20240109 17:24:53.999"/>
+<kw name="Capture Page Screenshot" library="AppiumLibrary">
+<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
+<msg timestamp="20240110 10:06:42.765" level="FAIL">No application is open</msg>
+<status status="FAIL" starttime="20240110 10:06:42.764" endtime="20240110 10:06:42.965"/>
 </kw>
-<status status="PASS" starttime="20240109 17:24:47.697" endtime="20240109 17:24:54.001"/>
+<msg timestamp="20240110 10:06:42.969" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg timestamp="20240110 10:06:42.973" level="FAIL">WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Error getting device platform version. Original error: Error executing adbExec. Original error: 'Command 'C:\\Users\\user\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe -P 5037 -s RR8M403V2TZ shell getprop ro.build.version.release' exited with code 1'; Command output: adb.exe: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+
+Stacktrace:
+UnknownError: An unknown server-side error occurred while processing the command. Original error: Error getting device platform version. Original error: Error executing adbExec. Original error: 'Command 'C:\\Users\\user\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe -P 5037 -s RR8M403V2TZ shell getprop ro.build.version.release' exited with code 1'; Command output: adb.exe: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+
+    at getResponseForW3CError (C:\Users\user\AppData\Local\Programs\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\user\AppData\Local\Programs\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:380:37)</msg>
+<status status="FAIL" starttime="20240110 10:06:42.057" endtime="20240110 10:06:42.973"/>
 </kw>
-<status status="PASS" starttime="20240109 17:24:47.697" endtime="20240109 17:24:54.002"/>
+<status status="FAIL" starttime="20240110 10:06:42.057" endtime="20240110 10:06:42.973"/>
 </kw>
-<kw name="Login With Valid Credentials" library="loginPage">
-<kw name="Verify Home Page Appears" library="homePage">
-<kw name="Wait Until Element Is Visible" library="AppiumLibrary">
-<arg>${logo_homePage}</arg>
-<doc>Waits until element specified with `locator` is visible.</doc>
-<msg timestamp="20240109 17:24:54.574" level="INFO">xpath criteria: //android.widget.ImageView[@resource-id="com.example.myapplication:id/imageView4"]</msg>
-<status status="PASS" starttime="20240109 17:24:54.005" endtime="20240109 17:24:54.578"/>
+<status status="FAIL" starttime="20240110 10:06:42.057" endtime="20240110 10:06:42.973"/>
 </kw>
-<status status="PASS" starttime="20240109 17:24:54.004" endtime="20240109 17:24:54.578"/>
-</kw>
-<kw name="Click Sign In Button On Home Page" library="homePage">
-<kw name="Wait Until Element Is Visible" library="AppiumLibrary">
-<arg>${signIn_button_homePage}</arg>
-<doc>Waits until element specified with `locator` is visible.</doc>
-<msg timestamp="20240109 17:24:54.614" level="INFO">xpath criteria: //android.widget.Button[@resource-id="com.example.myapplication:id/login"]</msg>
-<status status="PASS" starttime="20240109 17:24:54.579" endtime="20240109 17:24:54.615"/>
-</kw>
-<kw name="Click Element" library="AppiumLibrary">
-<arg>${signIn_button_homePage}</arg>
-<doc>Click element identified by `locator`.</doc>
-<msg timestamp="20240109 17:24:54.619" level="INFO">Clicking element '//android.widget.Button[@resource-id="com.example.myapplication:id/login"]'.</msg>
-<msg timestamp="20240109 17:24:54.670" level="INFO">xpath criteria: //android.widget.Button[@resource-id="com.example.myapplication:id/login"]</msg>
-<status status="PASS" starttime="20240109 17:24:54.615" endtime="20240109 17:24:54.671"/>
-</kw>
-<status status="PASS" starttime="20240109 17:24:54.578" endtime="20240109 17:24:54.671"/>
-</kw>
-<kw name="Verify Login Appears" library="loginPage">
-<kw name="Wait Until Element Is Visible" library="AppiumLibrary">
-<arg>${email_input_loginPage}</arg>
-<doc>Waits until element specified with `locator` is visible.</doc>
-<msg timestamp="20240109 17:24:55.426" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="com.example.myapplication:id/username"]
-xpath criteria: //android.widget.EditText[@resource-id="com.example.myapplication:id/username"]</msg>
-<status status="PASS" starttime="20240109 17:24:54.672" endtime="20240109 17:24:55.427"/>
-</kw>
-<kw name="Wait Until Element Is Visible" library="AppiumLibrary">
-<arg>${password_input_loginPage}</arg>
-<doc>Waits until element specified with `locator` is visible.</doc>
-<msg timestamp="20240109 17:24:55.452" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="com.example.myapplication:id/password"]</msg>
-<status status="PASS" starttime="20240109 17:24:55.427" endtime="20240109 17:24:55.452"/>
-</kw>
-<kw name="Wait Until Element Is Visible" library="AppiumLibrary">
-<arg>${signIn_button_loginPage}</arg>
-<doc>Waits until element specified with `locator` is visible.</doc>
-<msg timestamp="20240109 17:24:55.472" level="INFO">xpath criteria: //android.widget.Button[@resource-id="com.example.myapplication:id/signIn"]</msg>
-<status status="PASS" starttime="20240109 17:24:55.453" endtime="20240109 17:24:55.472"/>
-</kw>
-<status status="PASS" starttime="20240109 17:24:54.671" endtime="20240109 17:24:55.472"/>
-</kw>
-<kw name="Input User Email On Login Page" library="loginPage">
-<arg>${email}</arg>
-<kw name="Input Text" library="AppiumLibrary">
-<arg>${email_input_loginPage}</arg>
-<arg>${email}</arg>
-<doc>Types the given `text` into text field identified by `locator`.</doc>
-<msg timestamp="20240109 17:24:55.477" level="INFO">Typing text 'support@ngendigital.com' into text field '//android.widget.EditText[@resource-id="com.example.myapplication:id/username"]'</msg>
-<msg timestamp="20240109 17:24:55.503" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="com.example.myapplication:id/username"]</msg>
-<status status="PASS" starttime="20240109 17:24:55.474" endtime="20240109 17:24:55.503"/>
-</kw>
-<status status="PASS" starttime="20240109 17:24:55.473" endtime="20240109 17:24:55.503"/>
-</kw>
-<kw name="Input User Password On Login Page" library="loginPage">
-<arg>${password}</arg>
-<kw name="Input Text" library="AppiumLibrary">
-<arg>${password_input_loginPage}</arg>
-<arg>${password}</arg>
-<doc>Types the given `text` into text field identified by `locator`.</doc>
-<msg timestamp="20240109 17:24:55.508" level="INFO">Typing text 'abc123' into text field '//android.widget.EditText[@resource-id="com.example.myapplication:id/password"]'</msg>
-<msg timestamp="20240109 17:24:56.021" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="com.example.myapplication:id/password"]</msg>
-<status status="PASS" starttime="20240109 17:24:55.504" endtime="20240109 17:24:56.021"/>
-</kw>
-<status status="PASS" starttime="20240109 17:24:55.503" endtime="20240109 17:24:56.022"/>
-</kw>
-<kw name="Click Sign In Button On Login Page" library="loginPage">
-<kw name="Click Element" library="AppiumLibrary">
-<arg>${signIn_button_loginPage}</arg>
-<doc>Click element identified by `locator`.</doc>
-<msg timestamp="20240109 17:24:56.027" level="INFO">Clicking element '//android.widget.Button[@resource-id="com.example.myapplication:id/signIn"]'.</msg>
-<msg timestamp="20240109 17:24:56.575" level="INFO">xpath criteria: //android.widget.Button[@resource-id="com.example.myapplication:id/signIn"]</msg>
-<status status="PASS" starttime="20240109 17:24:56.022" endtime="20240109 17:24:56.575"/>
-</kw>
-<status status="PASS" starttime="20240109 17:24:56.022" endtime="20240109 17:24:56.575"/>
-</kw>
-<status status="PASS" starttime="20240109 17:24:54.003" endtime="20240109 17:24:56.576"/>
-</kw>
-<kw name="Flight Booking One Way" library="oneWayBooking">
-<kw name="Go to Booking Page" library="oneWayBooking">
-<kw name="Wait Until Element Is Visible" library="AppiumLibrary">
-<arg>${userName_text_homePage}</arg>
-<doc>Waits until element specified with `locator` is visible.</doc>
-<msg timestamp="20240109 17:24:57.306" level="INFO">xpath criteria: //android.widget.TextView[@resource-id="com.example.myapplication:id/textView"]
-xpath criteria: //android.widget.TextView[@resource-id="com.example.myapplication:id/textView"]</msg>
-<status status="PASS" starttime="20240109 17:24:56.577" endtime="20240109 17:24:57.307"/>
-</kw>
-<kw name="Click Element" library="AppiumLibrary">
-<arg>${button_bookflight}</arg>
-<doc>Click element identified by `locator`.</doc>
-<msg timestamp="20240109 17:24:57.313" level="INFO">Clicking element 'com.example.myapplication:id/book'.</msg>
-<msg timestamp="20240109 17:24:57.388" level="INFO">criteria is com.example.myapplication:id/book</msg>
-<status status="PASS" starttime="20240109 17:24:57.308" endtime="20240109 17:24:57.389"/>
-</kw>
-<status status="PASS" starttime="20240109 17:24:56.577" endtime="20240109 17:24:57.389"/>
-</kw>
-<kw name="Verify Booking Appears" library="oneWayBooking">
-<kw name="Wait Until Element Is Visible" library="AppiumLibrary">
-<arg>${button_dropdown_fromcity}</arg>
-<doc>Waits until element specified with `locator` is visible.</doc>
-<msg timestamp="20240109 17:24:58.023" level="INFO">criteria is com.example.myapplication:id/spinnerFrom
-criteria is com.example.myapplication:id/spinnerFrom</msg>
-<status status="PASS" starttime="20240109 17:24:57.390" endtime="20240109 17:24:58.023"/>
-</kw>
-<kw name="Wait Until Element Is Visible" library="AppiumLibrary">
-<arg>${button_dropdown_tocity}</arg>
-<doc>Waits until element specified with `locator` is visible.</doc>
-<msg timestamp="20240109 17:24:58.047" level="INFO">criteria is com.example.myapplication:id/spinnerTo</msg>
-<status status="PASS" starttime="20240109 17:24:58.024" endtime="20240109 17:24:58.047"/>
-</kw>
-<status status="PASS" starttime="20240109 17:24:57.390" endtime="20240109 17:24:58.047"/>
-</kw>
-<kw name="Select From City" library="oneWayBooking">
-<arg>${button_dropdown_fromcity}</arg>
-<arg>${value_fromcity}</arg>
-<kw name="Click Element" library="AppiumLibrary">
-<arg>${button_dropdown_fromcity}</arg>
-<doc>Click element identified by `locator`.</doc>
-<msg timestamp="20240109 17:24:58.051" level="INFO">Clicking element 'com.example.myapplication:id/spinnerFrom'.</msg>
-<msg timestamp="20240109 17:24:58.105" level="INFO">criteria is com.example.myapplication:id/spinnerFrom</msg>
-<status status="PASS" starttime="20240109 17:24:58.048" endtime="20240109 17:24:58.105"/>
-</kw>
-<kw name="Wait Until Element Is Visible" library="AppiumLibrary">
-<arg>xpath=//*[@text='${value_fromcity}']</arg>
-<doc>Waits until element specified with `locator` is visible.</doc>
-<msg timestamp="20240109 17:24:58.959" level="INFO">xpath criteria: //*[@text='Chicago']</msg>
-<status status="PASS" starttime="20240109 17:24:58.105" endtime="20240109 17:24:58.959"/>
-</kw>
-<kw name="Click Element" library="AppiumLibrary">
-<arg>xpath=//*[@text='${value_fromcity}']</arg>
-<doc>Click element identified by `locator`.</doc>
-<msg timestamp="20240109 17:24:58.964" level="INFO">Clicking element 'xpath=//*[@text='Chicago']'.</msg>
-<msg timestamp="20240109 17:24:59.628" level="INFO">xpath criteria: //*[@text='Chicago']</msg>
-<status status="PASS" starttime="20240109 17:24:58.960" endtime="20240109 17:24:59.629"/>
-</kw>
-<status status="PASS" starttime="20240109 17:24:58.048" endtime="20240109 17:24:59.629"/>
-</kw>
-<kw name="Select To City" library="oneWayBooking">
-<arg>${button_dropdown_tocity}</arg>
-<arg>${value_tocity}</arg>
-<kw name="Click Element" library="AppiumLibrary">
-<arg>${button_dropdown_tocity}</arg>
-<doc>Click element identified by `locator`.</doc>
-<msg timestamp="20240109 17:24:59.637" level="INFO">Clicking element 'com.example.myapplication:id/spinnerTo'.</msg>
-<msg timestamp="20240109 17:24:59.704" level="INFO">criteria is com.example.myapplication:id/spinnerTo</msg>
-<status status="PASS" starttime="20240109 17:24:59.631" endtime="20240109 17:24:59.705"/>
-</kw>
-<kw name="Wait Until Element Is Visible" library="AppiumLibrary">
-<arg>xpath=//*[@text='${value_tocity}']</arg>
-<doc>Waits until element specified with `locator` is visible.</doc>
-<msg timestamp="20240109 17:25:00.561" level="INFO">xpath criteria: //*[@text='Paris']
-xpath criteria: //*[@text='Paris']</msg>
-<status status="PASS" starttime="20240109 17:24:59.705" endtime="20240109 17:25:00.562"/>
-</kw>
-<kw name="Click Element" library="AppiumLibrary">
-<arg>xpath=//*[@text='${value_tocity}']</arg>
-<doc>Click element identified by `locator`.</doc>
-<msg timestamp="20240109 17:25:00.567" level="INFO">Clicking element 'xpath=//*[@text='Paris']'.</msg>
-<msg timestamp="20240109 17:25:01.234" level="INFO">xpath criteria: //*[@text='Paris']</msg>
-<status status="PASS" starttime="20240109 17:25:00.562" endtime="20240109 17:25:01.234"/>
-</kw>
-<status status="PASS" starttime="20240109 17:24:59.630" endtime="20240109 17:25:01.235"/>
-</kw>
-<kw name="Select Class" library="oneWayBooking">
-<arg>${button_dropdown_class}</arg>
-<arg>${value_class}</arg>
-<kw name="Click Element" library="AppiumLibrary">
-<arg>${button_dropdown_class}</arg>
-<doc>Click element identified by `locator`.</doc>
-<msg timestamp="20240109 17:25:01.240" level="INFO">Clicking element 'com.example.myapplication:id/spinnerClass'.</msg>
-<msg timestamp="20240109 17:25:01.324" level="INFO">criteria is com.example.myapplication:id/spinnerClass</msg>
-<status status="PASS" starttime="20240109 17:25:01.236" endtime="20240109 17:25:01.325"/>
-</kw>
-<kw name="Wait Until Element Is Visible" library="AppiumLibrary">
-<arg>xpath=//*[@text='${value_class}']</arg>
-<doc>Waits until element specified with `locator` is visible.</doc>
-<msg timestamp="20240109 17:25:02.182" level="INFO">xpath criteria: //*[@text='First']</msg>
-<status status="PASS" starttime="20240109 17:25:01.325" endtime="20240109 17:25:02.182"/>
-</kw>
-<kw name="Click Element" library="AppiumLibrary">
-<arg>xpath=//*[@text='${value_class}']</arg>
-<doc>Click element identified by `locator`.</doc>
-<msg timestamp="20240109 17:25:02.189" level="INFO">Clicking element 'xpath=//*[@text='First']'.</msg>
-<msg timestamp="20240109 17:25:02.847" level="INFO">xpath criteria: //*[@text='First']</msg>
-<status status="PASS" starttime="20240109 17:25:02.183" endtime="20240109 17:25:02.848"/>
-</kw>
-<status status="PASS" starttime="20240109 17:25:01.235" endtime="20240109 17:25:02.848"/>
-</kw>
-<kw name="Select Start Date" library="oneWayBooking">
-<kw name="Click Element" library="AppiumLibrary">
-<arg>${button_startdate}</arg>
-<doc>Click element identified by `locator`.</doc>
-<msg timestamp="20240109 17:25:02.856" level="INFO">Clicking element 'com.example.myapplication:id/textStartDate'.</msg>
-<msg timestamp="20240109 17:25:02.935" level="INFO">criteria is com.example.myapplication:id/textStartDate</msg>
-<status status="PASS" starttime="20240109 17:25:02.850" endtime="20240109 17:25:02.936"/>
-</kw>
-<kw name="Wait Until Element Is Visible" library="AppiumLibrary">
-<arg>xpath=${selectdate_startdate}</arg>
-<doc>Waits until element specified with `locator` is visible.</doc>
-<msg timestamp="20240109 17:25:03.704" level="INFO">xpath criteria: //android.view.View[@content-desc="30 August 2019"]
-xpath criteria: //android.view.View[@content-desc="30 August 2019"]</msg>
-<status status="PASS" starttime="20240109 17:25:02.936" endtime="20240109 17:25:03.704"/>
-</kw>
-<kw name="Click Element" library="AppiumLibrary">
-<arg>xpath=${selectdate_startdate}</arg>
-<doc>Click element identified by `locator`.</doc>
-<msg timestamp="20240109 17:25:03.708" level="INFO">Clicking element 'xpath=//android.view.View[@content-desc="30 August 2019"]'.</msg>
-<msg timestamp="20240109 17:25:04.382" level="INFO">xpath criteria: //android.view.View[@content-desc="30 August 2019"]</msg>
-<status status="PASS" starttime="20240109 17:25:03.704" endtime="20240109 17:25:04.383"/>
-</kw>
-<kw name="Click Element" library="AppiumLibrary">
-<arg>${submitbutton_startdate}</arg>
-<doc>Click element identified by `locator`.</doc>
-<msg timestamp="20240109 17:25:04.388" level="INFO">Clicking element 'android:id/button1'.</msg>
-<msg timestamp="20240109 17:25:04.510" level="INFO">criteria is android:id/button1</msg>
-<status status="PASS" starttime="20240109 17:25:04.383" endtime="20240109 17:25:04.511"/>
-</kw>
-<status status="PASS" starttime="20240109 17:25:02.849" endtime="20240109 17:25:04.511"/>
-</kw>
-<kw name="Choose Option Flight" library="oneWayBooking">
-<kw name="Click Element" library="AppiumLibrary">
-<arg>${radiobutton_flight}</arg>
-<doc>Click element identified by `locator`.</doc>
-<msg timestamp="20240109 17:25:04.516" level="INFO">Clicking element 'com.example.myapplication:id/radioButtonFlight'.</msg>
-<msg timestamp="20240109 17:25:05.092" level="INFO">criteria is com.example.myapplication:id/radioButtonFlight</msg>
-<status status="PASS" starttime="20240109 17:25:04.512" endtime="20240109 17:25:05.092"/>
-</kw>
-<status status="PASS" starttime="20240109 17:25:04.511" endtime="20240109 17:25:05.093"/>
-</kw>
-<kw name="Click Booking" library="oneWayBooking">
-<kw name="Click Element" library="AppiumLibrary">
-<arg>${buttonsubmit_bookflight}</arg>
-<doc>Click element identified by `locator`.</doc>
-<msg timestamp="20240109 17:25:05.098" level="INFO">Clicking element 'com.example.myapplication:id/book_flight'.</msg>
-<msg timestamp="20240109 17:25:05.636" level="INFO">criteria is com.example.myapplication:id/book_flight</msg>
-<status status="PASS" starttime="20240109 17:25:05.094" endtime="20240109 17:25:05.636"/>
-</kw>
-<status status="PASS" starttime="20240109 17:25:05.093" endtime="20240109 17:25:05.637"/>
-</kw>
-<kw name="Verify Confirm Booking Order Appears" library="oneWayBooking">
-<kw name="Wait Until Element Is Visible" library="AppiumLibrary">
-<arg>${select_price}</arg>
-<doc>Waits until element specified with `locator` is visible.</doc>
-<msg timestamp="20240109 17:25:06.336" level="INFO">criteria is com.example.myapplication:id/price9</msg>
-<status status="PASS" starttime="20240109 17:25:05.637" endtime="20240109 17:25:06.337"/>
-</kw>
-<status status="PASS" starttime="20240109 17:25:05.637" endtime="20240109 17:25:06.337"/>
-</kw>
-<kw name="Select Price" library="oneWayBooking">
-<kw name="Click Element" library="AppiumLibrary">
-<arg>${select_price}</arg>
-<doc>Click element identified by `locator`.</doc>
-<msg timestamp="20240109 17:25:06.342" level="INFO">Clicking element 'com.example.myapplication:id/price9'.</msg>
-<msg timestamp="20240109 17:25:06.421" level="INFO">criteria is com.example.myapplication:id/price9</msg>
-<status status="PASS" starttime="20240109 17:25:06.339" endtime="20240109 17:25:06.421"/>
-</kw>
-<status status="PASS" starttime="20240109 17:25:06.338" endtime="20240109 17:25:06.421"/>
-</kw>
-<kw name="Submit Confirm Booking Order" library="oneWayBooking">
-<kw name="Click Element" library="AppiumLibrary">
-<arg>${button_confirm_order}</arg>
-<doc>Click element identified by `locator`.</doc>
-<msg timestamp="20240109 17:25:06.426" level="INFO">Clicking element 'com.example.myapplication:id/confirm_order'.</msg>
-<msg timestamp="20240109 17:25:07.091" level="INFO">criteria is com.example.myapplication:id/confirm_order</msg>
-<status status="PASS" starttime="20240109 17:25:06.422" endtime="20240109 17:25:07.091"/>
-</kw>
-<status status="PASS" starttime="20240109 17:25:06.422" endtime="20240109 17:25:07.092"/>
-</kw>
-<status status="PASS" starttime="20240109 17:24:56.576" endtime="20240109 17:25:07.092"/>
-</kw>
-<kw name="Verify Booking Flight" library="homePage">
-<kw name="Wait Until Element Is Visible" library="AppiumLibrary">
-<arg>${notif_successbooking}</arg>
-<doc>Waits until element specified with `locator` is visible.</doc>
-<msg timestamp="20240109 17:25:07.653" level="INFO">criteria is com.example.myapplication:id/checkedTextView</msg>
-<status status="PASS" starttime="20240109 17:25:07.094" endtime="20240109 17:25:07.654"/>
-</kw>
-<status status="PASS" starttime="20240109 17:25:07.093" endtime="20240109 17:25:07.654"/>
-</kw>
-<kw name="Close Flight Application" library="base" type="TEARDOWN">
+<kw name="Close Flight Aplication" library="base" type="TEARDOWN">
 <kw name="Close Application" library="AppiumLibrary">
 <doc>Closes the current application and also close webdriver session.</doc>
-<status status="PASS" starttime="20240109 17:25:07.655" endtime="20240109 17:25:08.146"/>
+<kw name="Capture Page Screenshot" library="AppiumLibrary">
+<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
+<msg timestamp="20240110 10:06:42.981" level="FAIL">No application is open</msg>
+<status status="FAIL" starttime="20240110 10:06:42.978" endtime="20240110 10:06:42.981"/>
 </kw>
-<status status="PASS" starttime="20240109 17:25:07.655" endtime="20240109 17:25:08.147"/>
+<msg timestamp="20240110 10:06:42.986" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg timestamp="20240110 10:06:42.986" level="FAIL">No application is open</msg>
+<status status="FAIL" starttime="20240110 10:06:42.978" endtime="20240110 10:06:42.990"/>
 </kw>
-<status status="PASS" starttime="20240109 17:24:47.697" endtime="20240109 17:25:08.147"/>
+<status status="FAIL" starttime="20240110 10:06:42.978" endtime="20240110 10:06:42.990">No application is open</status>
+</kw>
+<status status="FAIL" starttime="20240110 10:06:42.057" endtime="20240110 10:06:42.990">Setup failed:
+WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Error getting device platform version. Original error: Error executing adbExec. Original error: 'Command 'C:\\Users\\user\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe -P 5037 -s RR8M403V2TZ shell getprop ro.build.version.release' exited with code 1'; Command output: adb.exe: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+
+Stacktrace:
+UnknownError: An unknown server-side error occurred while processing the command. Original error: Error getting device platform version. Original error: Error executing adbExec. Original error: 'Command 'C:\\Users\\user\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe -P 5037 -s RR8M403V2TZ shell getprop ro.build.version.release' exited with code 1'; Command output: adb.exe: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+
+    at getResponseForW3CError (C:\Users\user\AppData\Local\Programs\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\user\AppData\Local\Programs\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:380:37)
+
+Also teardown failed:
+No application is open</status>
 </test>
-<status status="PASS" starttime="20240109 17:24:47.599" endtime="20240109 17:25:08.147"/>
+<test id="s1-s1-t2" name="Doing One Way Booking Flight" line="37">
+<kw name="Run Keywords" library="BuiltIn" type="SETUP">
+<arg>Open Flight Aplication</arg>
+<arg>AND</arg>
+<arg>Login With Valid Credentials</arg>
+<doc>Executes all the given keywords in a sequence.</doc>
+<kw name="Open Flight Aplication" library="base">
+<kw name="Open Application" library="AppiumLibrary">
+<arg>remote_url=${REMOTE_URL}</arg>
+<arg>platformName=${PLATFORM_NAME}</arg>
+<arg>platformVersion=${PLATFORM_VERSION}</arg>
+<arg>deviceName=${DEVICE_NAME}</arg>
+<arg>appPackege=${APP_PACKAGE}</arg>
+<arg>appActivity=${APP_ACTIVITY}</arg>
+<doc>Opens a new application to given Appium server.
+Capabilities of appium server, Android and iOS,
+Please check https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/server-args.md
+| *Option*            | *Man.* | *Description*     |
+| remote_url          | Yes    | Appium server url |
+| alias               | no     | alias             |
+| strict_ssl          | No     | allows you to send commands to an invalid certificate host like a self-signed one. |</doc>
+<kw name="Capture Page Screenshot" library="AppiumLibrary">
+<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
+<msg timestamp="20240110 10:06:43.323" level="FAIL">No application is open</msg>
+<status status="FAIL" starttime="20240110 10:06:43.323" endtime="20240110 10:06:43.325"/>
+</kw>
+<msg timestamp="20240110 10:06:43.331" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg timestamp="20240110 10:06:43.331" level="FAIL">WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Error getting device platform version. Original error: Error executing adbExec. Original error: 'Command 'C:\\Users\\user\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe -P 5037 -s RR8M403V2TZ shell getprop ro.build.version.release' exited with code 1'; Command output: adb.exe: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+
+Stacktrace:
+UnknownError: An unknown server-side error occurred while processing the command. Original error: Error getting device platform version. Original error: Error executing adbExec. Original error: 'Command 'C:\\Users\\user\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe -P 5037 -s RR8M403V2TZ shell getprop ro.build.version.release' exited with code 1'; Command output: adb.exe: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+
+    at getResponseForW3CError (C:\Users\user\AppData\Local\Programs\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\user\AppData\Local\Programs\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:380:37)</msg>
+<status status="FAIL" starttime="20240110 10:06:43.002" endtime="20240110 10:06:43.337"/>
+</kw>
+<status status="FAIL" starttime="20240110 10:06:43.002" endtime="20240110 10:06:43.337"/>
+</kw>
+<status status="FAIL" starttime="20240110 10:06:43.002" endtime="20240110 10:06:43.337"/>
+</kw>
+<kw name="Close Flight Aplication" library="base" type="TEARDOWN">
+<kw name="Close Application" library="AppiumLibrary">
+<doc>Closes the current application and also close webdriver session.</doc>
+<kw name="Capture Page Screenshot" library="AppiumLibrary">
+<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
+<msg timestamp="20240110 10:06:43.343" level="FAIL">No application is open</msg>
+<status status="FAIL" starttime="20240110 10:06:43.342" endtime="20240110 10:06:43.343"/>
+</kw>
+<msg timestamp="20240110 10:06:43.348" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg timestamp="20240110 10:06:43.348" level="FAIL">No application is open</msg>
+<status status="FAIL" starttime="20240110 10:06:43.337" endtime="20240110 10:06:43.353"/>
+</kw>
+<status status="FAIL" starttime="20240110 10:06:43.337" endtime="20240110 10:06:43.353">No application is open</status>
+</kw>
+<status status="FAIL" starttime="20240110 10:06:42.998" endtime="20240110 10:06:43.354">Setup failed:
+WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Error getting device platform version. Original error: Error executing adbExec. Original error: 'Command 'C:\\Users\\user\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe -P 5037 -s RR8M403V2TZ shell getprop ro.build.version.release' exited with code 1'; Command output: adb.exe: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+
+Stacktrace:
+UnknownError: An unknown server-side error occurred while processing the command. Original error: Error getting device platform version. Original error: Error executing adbExec. Original error: 'Command 'C:\\Users\\user\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe -P 5037 -s RR8M403V2TZ shell getprop ro.build.version.release' exited with code 1'; Command output: adb.exe: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+
+    at getResponseForW3CError (C:\Users\user\AppData\Local\Programs\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\user\AppData\Local\Programs\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:380:37)
+
+Also teardown failed:
+No application is open</status>
+</test>
+<test id="s1-s1-t3" name="Search Flight" line="42">
+<kw name="Run Keywords" library="BuiltIn" type="SETUP">
+<arg>Open Flight Aplication</arg>
+<arg>AND</arg>
+<arg>Login With Valid Credentials</arg>
+<doc>Executes all the given keywords in a sequence.</doc>
+<kw name="Open Flight Aplication" library="base">
+<kw name="Open Application" library="AppiumLibrary">
+<arg>remote_url=${REMOTE_URL}</arg>
+<arg>platformName=${PLATFORM_NAME}</arg>
+<arg>platformVersion=${PLATFORM_VERSION}</arg>
+<arg>deviceName=${DEVICE_NAME}</arg>
+<arg>appPackege=${APP_PACKAGE}</arg>
+<arg>appActivity=${APP_ACTIVITY}</arg>
+<doc>Opens a new application to given Appium server.
+Capabilities of appium server, Android and iOS,
+Please check https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/server-args.md
+| *Option*            | *Man.* | *Description*     |
+| remote_url          | Yes    | Appium server url |
+| alias               | no     | alias             |
+| strict_ssl          | No     | allows you to send commands to an invalid certificate host like a self-signed one. |</doc>
+<kw name="Capture Page Screenshot" library="AppiumLibrary">
+<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
+<msg timestamp="20240110 10:06:43.657" level="FAIL">No application is open</msg>
+<status status="FAIL" starttime="20240110 10:06:43.657" endtime="20240110 10:06:43.661"/>
+</kw>
+<msg timestamp="20240110 10:06:43.669" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg timestamp="20240110 10:06:43.669" level="FAIL">WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Error getting device platform version. Original error: Error executing adbExec. Original error: 'Command 'C:\\Users\\user\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe -P 5037 -s RR8M403V2TZ shell getprop ro.build.version.release' exited with code 1'; Command output: adb.exe: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+
+Stacktrace:
+UnknownError: An unknown server-side error occurred while processing the command. Original error: Error getting device platform version. Original error: Error executing adbExec. Original error: 'Command 'C:\\Users\\user\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe -P 5037 -s RR8M403V2TZ shell getprop ro.build.version.release' exited with code 1'; Command output: adb.exe: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+
+    at getResponseForW3CError (C:\Users\user\AppData\Local\Programs\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\user\AppData\Local\Programs\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:380:37)</msg>
+<status status="FAIL" starttime="20240110 10:06:43.366" endtime="20240110 10:06:43.673"/>
+</kw>
+<status status="FAIL" starttime="20240110 10:06:43.366" endtime="20240110 10:06:43.673"/>
+</kw>
+<status status="FAIL" starttime="20240110 10:06:43.365" endtime="20240110 10:06:43.673"/>
+</kw>
+<kw name="Close Flight Aplication" library="base" type="TEARDOWN">
+<kw name="Close Application" library="AppiumLibrary">
+<doc>Closes the current application and also close webdriver session.</doc>
+<kw name="Capture Page Screenshot" library="AppiumLibrary">
+<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
+<msg timestamp="20240110 10:06:43.678" level="FAIL">No application is open</msg>
+<status status="FAIL" starttime="20240110 10:06:43.678" endtime="20240110 10:06:43.681"/>
+</kw>
+<msg timestamp="20240110 10:06:43.686" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg timestamp="20240110 10:06:43.686" level="FAIL">No application is open</msg>
+<status status="FAIL" starttime="20240110 10:06:43.678" endtime="20240110 10:06:43.690"/>
+</kw>
+<status status="FAIL" starttime="20240110 10:06:43.673" endtime="20240110 10:06:43.690">No application is open</status>
+</kw>
+<status status="FAIL" starttime="20240110 10:06:43.359" endtime="20240110 10:06:43.690">Setup failed:
+WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: Error getting device platform version. Original error: Error executing adbExec. Original error: 'Command 'C:\\Users\\user\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe -P 5037 -s RR8M403V2TZ shell getprop ro.build.version.release' exited with code 1'; Command output: adb.exe: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+
+Stacktrace:
+UnknownError: An unknown server-side error occurred while processing the command. Original error: Error getting device platform version. Original error: Error executing adbExec. Original error: 'Command 'C:\\Users\\user\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe -P 5037 -s RR8M403V2TZ shell getprop ro.build.version.release' exited with code 1'; Command output: adb.exe: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+
+    at getResponseForW3CError (C:\Users\user\AppData\Local\Programs\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\user\AppData\Local\Programs\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:380:37)
+
+Also teardown failed:
+No application is open</status>
+</test>
+<status status="FAIL" starttime="20240110 10:06:40.938" endtime="20240110 10:06:43.701"/>
+</suite>
+<status status="FAIL" starttime="20240110 10:06:40.821" endtime="20240110 10:06:43.711"/>
 </suite>
 <statistics>
 <total>
-<stat pass="1" fail="0" skip="0">All Tests</stat>
+<stat pass="0" fail="3" skip="0">All Tests</stat>
 </total>
 <tag>
 </tag>
 <suite>
-<stat pass="1" fail="0" skip="0" id="s1" name="loginSuite">loginSuite</stat>
+<stat pass="0" fail="3" skip="0" id="s1" name="Suites">Suites</stat>
+<stat pass="0" fail="3" skip="0" id="s1-s1" name="loginSuite">Suites.loginSuite</stat>
 </suite>
 </statistics>
 <errors>
+<msg timestamp="20240110 10:06:42.969" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg timestamp="20240110 10:06:42.986" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg timestamp="20240110 10:06:43.331" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg timestamp="20240110 10:06:43.348" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg timestamp="20240110 10:06:43.669" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg timestamp="20240110 10:06:43.686" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
 </errors>
 </robot>

@@ -3,9 +3,11 @@ Resource         ../pageObjects/homePageObject/homePage.robot
 Resource         ../pageObjects/loginPageObject/loginPage.robot
 Resource         ../pageObjects/oneWayBookingObject/oneWayBooking.robot
 Resource         ../pageObjects/searchFlight/searchFlight.robot
-Test Setup       Run Keywords    
-...              Open Flight Application 
-Test Teardown    Close Flight Application
+Resource         ../pageObjects/base/base.robot
+Test Setup        Run Keywords
+...               Open Flight Aplication 
+...               AND   Login With Valid Credentials
+Test Teardown     Close Flight Aplication
 
 *** Variables ***
 ${VALID_EMAIL}               support@ngendigital.com
