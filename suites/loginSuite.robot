@@ -34,6 +34,9 @@ User should be able to login with valid credentials
     Verify User Is Logged In
     # Verify Booking Flight
 
+Invalid Login
+    Login With InValid Email
+
 Doing One Way Booking Flight
     Login With Valid Credentials
     Flight Booking One Way

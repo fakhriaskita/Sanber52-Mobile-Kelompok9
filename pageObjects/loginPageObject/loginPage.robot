@@ -9,6 +9,9 @@ Library    AppiumLibrary
 ${VALID_EMAIL}            support@ngendigital.com
 ${VALID_PASSWORD}         abc123
 
+${INVALID_EMAIL}        invalid@
+${INVALID_PASSWORD}     abc123 
+
 
 
 *** Keywords ***
@@ -35,4 +38,13 @@ Login With Valid Credentials
     Verify login Appears
     Input User Email On Login Page       ${email}
     Input User Password On Login Page    ${password}
+    Click Sign In Button In Login Page
+
+Login With InValid Email
+    [Arguments]    ${email1}=${INVALID_EMAIL}        ${password1}=${INVALID_EMAIL} 
+    Verify Home Page Appears
+    Click Sign In Button In Home Page
+    Verify login Appears
+    Input User Email On Login Page       ${email1}
+    Input User Password On Login Page    ${password1}
     Click Sign In Button In Login Page
