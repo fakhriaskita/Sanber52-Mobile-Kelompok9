@@ -2,7 +2,7 @@
  Repository for Mobile automation test.
  
  List Team & Task:
- 1. Fatma Nurul Hidayah : 
+ 1. Fatma Nurul Hidayah : Invalid login with 
  2. Nurcahaya Kerentryna : 
  3. Alwi Faisal Zulfikar : 
  4. Hadi Al Bukhori : Invalid Login with Various Condition
